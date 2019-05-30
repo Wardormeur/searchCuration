@@ -1,0 +1,23 @@
+{
+
+  "manifest_version": 2,
+  "name": "Web search",
+  "description": "Let's you monitor, extract and rank your searches",
+  "version": "0.1",
+
+  "sidebar_action": {
+    "default_icon": "icons/star.png",
+    "default_title" : "Search curation",
+    "default_panel": "sidebar/index.html"
+  },
+
+  "permissions": ["storage", "tabs", "activeTab", "http://*/*", "https://*/*"],
+  "commands": {
+    "_execute_sidebar_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y"
+      }
+    }
+  }
+
+}

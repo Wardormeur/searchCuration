@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/sidebar/index.css"/>
+    <script src="../lib/webcomponents-bundle.js"></script>
+  </head>
+
+  <body>
+    <nav>
+      <ul>
+        <li><a target="_blank" href="/job-list/index.html">Job list</a></li>
+        <li><a href="#list">Add a listing</a></li>
+        <li><a href="#job">Add a job</a></li>
+      </ul>
+    </nav>
+    <webs-job-list></webs-job-list>
+    <webs-list></webs-list>
+    <webs-job></webs-job>
+
+    <!-- Templates -->
+    <template id="job">
+      <style>
+        p {
+          color: white;
+          background-color: #666;
+          padding: 5px;
+        }
+      </style>
+      <input type="text" name="title" value="" placeholder="Title">
+      <input type="hidden" name="title_selector" value="">
+      <button type="button" name="title">🔎</button>
+
+      <input type="text" name="salary" value="" placeholder="Salary">
+      <input type="hidden" name="salary_selector" value="">
+      <button type="button" name="salary">🔎</button>
+
+      <input type="text" name="company" value="" placeholder="Company">
+      <input type="hidden" name="company_selector" value="">
+      <button type="button" name="company">🔎</button>
+
+      <input type="text" name="location" value="" placeholder="Location">
+      <input type="hidden" name="location_selector" value="">
+      <button type="button" name="location">🔎</button>
+
+      <input type="text" name="created_at" value="" placeholder="Posted at">
+      <input type="hidden" name="created_at_selector" value="">
+      <button type="button" name="created_at">🔎</button>
+
+      <button type="submit">Save ✔</button>
+    </template>
+    <template id="list">
+      <!-- <p>Add current page to listing</p> -->
+    </template>
+    <template id="job-list">
+      <ul class="job-list">
+        <!-- <li>
+          <a href="">
+            <h4 name="title"></h4>
+            <h5><span name="location"></span><span name="salary"></span></h5>
+          </a>
+        </li> -->
+      </ul>
+      <style type="text/css">
+        h4 {
+          display: inline;
+          margin: 0;
+        }
+        h5 {
+          margin: 0;
+        }
+        h5 span:last-of-type {
+          padding-left: 1em;
+        }
+        ul {
+          list-style-type: none;
+          padding: 0;
+        }
+        li {
+          background-color: white;
+          margin-bottom: 1rem;
+          padding: 0.2rem 1rem 0.1rem;
+        }
+      </style>
+    </template>
+    <script src="/selector/index.js"></script>
+    <script src="/components/job.js"></script>
+    <script src="/components/list.js"></script>
+    <script src="/components/job-list.js"></script>
+    <script src="index.js"></script>
+  </body>
+
+</html>
