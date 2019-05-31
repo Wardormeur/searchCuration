@@ -4,23 +4,24 @@ class WebsearchJobList extends HTMLElement {
     super();
     let template = document.getElementById('job-list');
     let templateContent = template.content;
+    this.limit = 2;
 
     const shadowRoot = this.attachShadow({mode: 'open'})
       .appendChild(templateContent.cloneNode(true));
-  }
-  static get observedAttributes() {
-    return ['list'];
-  }
-  attributeChangedCallback() {
-    this.reloadList();
+    browser.storage.onChanged.addListener(this.render.bind(this));
   }
   connectedCallback() {
-    this.reloadList();
+    this.render();
   }
-  async reloadList() {
+  async render() {
+    await this.loadList();
     let ulElement = this.shadowRoot.querySelector('.job-list');
-    const list = await this.loadList();
-    list.forEach(job => {
+    // Empty
+    const range = document.createRange();
+    range.selectNodeContents(ulElement);
+    range.deleteContents();
+    // Recreate
+    this.list.slice(-this.limit).forEach(job => {
       let li = this.createJobListElement(job);
       ulElement.appendChild(li);
     });
@@ -57,7 +58,7 @@ class WebsearchJobList extends HTMLElement {
     } catch(e) {
       list = [];
     }
-    return list;
+    this.list = list;
   }
 }
 customElements.define('webs-job-list', WebsearchJobList)

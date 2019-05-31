@@ -37,6 +37,7 @@ class WebsearchJob extends HTMLElement {
     inputs.forEach((input) => {
       payload[input.name] = input.value;
     });
+    payload.addedAt = new Date();
     const currentTab = (await browser.tabs.query({active: true, windowId: browser.windows.WINDOW_ID_CURRENT}))[0];
     await this.addOrReplace(currentTab.url, payload);
   }

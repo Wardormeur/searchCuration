@@ -1,0 +1,27 @@
+{
+  "name": "websearch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wardormeur/searchCuration.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Wardormeur/searchCuration/issues"
+  },
+  "homepage": "https://github.com/Wardormeur/searchCuration#readme",
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.2.10",
+    "ag-grid": "^18.1.2",
+    "ag-grid-webcomponent": "^17.1.0"
+  }
+}

@@ -1,53 +1,22 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/sidebar/index.css"/>
-    <script src="../lib/webcomponents-bundle.js"></script>
+      <meta charset="UTF-8">
+      <title>ag-Grid Web Component - Simple Example</title>
+      <script src="/lib/backfill-v1-ce.js"></script>
+      <script src="/node_modules/ag-grid/dist/ag-grid.min.js"></script>
+      <script src="/node_modules/ag-grid-webcomponent/src/agGrid.js"></script>
+      <link rel="stylesheet" href="./index.css" ></link>
   </head>
-
   <body>
-    <nav>
-      <input type="text" placeholder="Title search"/>
-      <checkbox label="Selected"/>
-      <checkbox label="Awaiting"/>
-      <checkbox label="Rejected"/>
-    </nav>
-    <webs-job-list>
-      <slot name="actions"></slot>
-    </webs-job-list>
+    <h2>Jobs</h2>
 
-    <!-- Templates -->
+    <div class="test-header">
+      <input type="text" id="filter-text-box" placeholder="Filter..."/>
+    </div>
+    <ag-grid id="myGrid"
+             class="ag-theme-material"></ag-grid>
+    <script src="/job-list/index.js"></script>
 
-    <template id="job-list">
-      <ul class="job-list">
-
-      </ul>
-      <style type="text/css">
-        h4 {
-          display: inline;
-          margin: 0;
-        }
-        h5 {
-          margin: 0;
-        }
-        h5 span:last-of-type {
-          padding-left: 1em;
-        }
-        ul {
-          list-style-type: none;
-          padding: 0;
-        }
-        li {
-          background-color: white;
-          margin-bottom: 1rem;
-          padding: 0.2rem 1rem 0.1rem;
-        }
-      </style>
-    </template>
-
-    <script src="/components/job-list.js"></script>
   </body>
-
 </html>
