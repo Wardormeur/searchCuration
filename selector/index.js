@@ -1,10 +1,10 @@
-// Note: tabId is optional, considering we need user interaction, we'd better not pass it around
 class Selector {
   constructor(Tabs) {
     this.css = { file: '/selector/index.css' };
     this.js = { file: '/selector/client.js' };
     this.tabs = Tabs;
     this.started = false;
+    console.log('selector init')
     this.tabs.executeScript(this.js);
   }
   start(tabId) {

@@ -1,9 +1,4 @@
 let myWindowId;
-let currentTab;
-let selector;
-//const contentBox = document.querySelector("#content");
-
-
 
 /*
 Make the content box editable as soon as the user mouses over the sidebar.
@@ -25,7 +20,8 @@ window.addEventListener("mouseout", () => {
 });
 
 
-function updateContent() {
+function updateContent(e) {
+  console.log(e)
   browser.tabs.query({windowId: myWindowId, active: true})
     .then((tabs) => {
       return browser.storage.local.get(tabs[0].url);

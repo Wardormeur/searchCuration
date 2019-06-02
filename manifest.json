@@ -17,6 +17,10 @@
         "default": "Ctrl+Shift+Y"
       }
     }
+  },
+  "applications": {
+    "gecko": {
+      "id": "searchCuration@github.io"
+    }
   }
-
 }
