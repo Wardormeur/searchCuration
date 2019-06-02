@@ -3,6 +3,7 @@ class WebsearchJob extends HTMLElement {
     super();
     let template = document.getElementById('job');
     let templateContent = template.content;
+    this.storageKey = 'jobs';
     this.attachShadow({mode: 'open'})
       .appendChild(templateContent.cloneNode(true));
   }
@@ -18,35 +19,25 @@ class WebsearchJob extends HTMLElement {
     buttons.forEach(b => {
       b.addEventListener('click', this.toggleSelectorFor.bind(this, b.name));
     });
-    browser.tabs.onActivated.addListener(this.resetSelector.bind(this));
     const submitButton = this.shadowRoot.querySelector('button[type="submit"]');
     submitButton.addEventListener('click', this.save.bind(this));
-    this.resetSelector();
   }
   // Ensure that only one instance of the selector is running at a time
   // Avoid being too leaky by injecting in every tabs and letting it run
-  async resetSelector(activeInfo) {
-    if (this.selector && this.selector.started) {
-      console.log('resetting', activeInfo)
-      this.selector.stop(activeInfo.previousTabId);
-      this.currentTabId = activeInfo.tabId;
-    }
-    this.selector = new Selector(browser.tabs);
-  }
   async toggleSelectorFor(elementName) {
     const elInput = `*[name="${elementName}"]`;
     const elInputPath = `*[name="${elementName}_selector"]`;
     const el = this.shadowRoot.querySelector(elInput);
     const elPath = this.shadowRoot.querySelector(elInputPath);
-    if (this.selector.started) { this.selector.stop(this.currentTabId); }
+    if (this.selector.started) { this.selector.stop(); }
     try {
-      const selected = await this.selector.start(this.currentTabId);
+      const selected = await this.selector.start();
       el.value = selected.value;
       elPath.value = selected.path;
     } catch (e) {
       console.log('rejected', e);
     } finally {
-      this.selector.stop(this.currentTabId);
+      this.selector.stop();
     }
   }
   async save() {
@@ -62,7 +53,7 @@ class WebsearchJob extends HTMLElement {
   async addOrReplace(url, payload) {
     let list = [];
     try {
-      list = (await browser.storage.local.get('jobs')).jobs;
+      list = (await browser.storage.local.get(this.storageKey)).jobs;
       const jobIndex = list.findIndex(job => job.url === url);
       if (jobIndex > -1) list.splice(jobIndex, 1);
     }
@@ -70,7 +61,7 @@ class WebsearchJob extends HTMLElement {
       list = [];
     }
     list.push({ url, ...payload });
-    await browser.storage.local.set({ jobs: list });
+    await browser.storage.local.set({ [this.storageKey]: list });
   }
   reset() {
     const inputs = this.shadowRoot.querySelectorAll('input');

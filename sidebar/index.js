@@ -1,4 +1,5 @@
 let myWindowId;
+let selector;
 
 /*
 Make the content box editable as soon as the user mouses over the sidebar.
@@ -21,16 +22,17 @@ window.addEventListener("mouseout", () => {
 
 
 function updateContent(e) {
-  console.log(e)
-  browser.tabs.query({windowId: myWindowId, active: true})
-    .then((tabs) => {
-      return browser.storage.local.get(tabs[0].url);
-    })
-    .then((storedInfo) => {
-      // contentBox.textContent = storedInfo[Object.keys(storedInfo)[0]];
-    });
+  if (selector.started) { selector.stop(e.previousTabId); }
+  selector.currentTabId = e.tabId;
+  assignSelector();
 }
 
+function assignSelector() {
+  const listForm = document.querySelector('webs-list');
+  const jobForm = document.querySelector('webs-job');
+  listForm.selector = selector;
+  jobForm.selector = selector;
+}
 /*
 Update content when a new tab becomes active.
 */
@@ -39,15 +41,18 @@ browser.tabs.onActivated.addListener(updateContent);
 /*
 Update content when a new page is loaded into a tab.
 */
-browser.tabs.onUpdated.addListener(updateContent);
+// browser.tabs.onUpdated.addListener(updateContent);
 
 /*
 Setup the different listeners of the interface
 */
 browser.windows.getCurrent({populate: true}).then((windowInfo) => {
   myWindowId = windowInfo.id;
+  selector = new Selector(browser.tabs);
   browser.tabs.query({windowId: myWindowId, active: true})
     .then((tabs) => {
-      currentTab = tabs[0];
+      const currentTab = tabs[0];
+      selector.currentTabId = currentTab.id;
+      assignSelector();
     });
 });

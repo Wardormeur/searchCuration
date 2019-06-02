@@ -10,7 +10,7 @@
     <nav>
       <ul>
         <li><a target="_blank" href="/job-list/index.html">Job list</a></li>
-        <li><a href="#list">Add a listing</a></li>
+        <li><a href="/job-indexes/index.html">Indexes of searches</a></li>
         <li><a href="#job">Add a job</a></li>
       </ul>
     </nav>
@@ -51,7 +51,12 @@
       <button type="submit">Save ✔</button>
     </template>
     <template id="list">
-      <!-- <p>Add current page to listing</p> -->
+      <input type="text" name="listing_link" value="" placeholder="Link to job">
+      <input type="hidden" name="listing_link_selector" value="">
+      <button type="button" name="listing_link">🔎</button>
+
+      <button type="submit">Save ✔</button>
+      <br/>
     </template>
     <template id="job-list">
       <ul class="job-list">
@@ -62,6 +67,7 @@
           </a>
         </li> -->
       </ul>
+      <br/>
       <style type="text/css">
         h4 {
           display: inline;
