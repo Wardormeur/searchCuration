@@ -14,7 +14,6 @@ class WebsearchJob extends HTMLElement {
         windowId: browser.windows.WINDOW_ID_CURRENT
       })
     )[0].id;
-    console.log('connectedCallback', this.currentTabId);
     const buttons = this.shadowRoot.querySelectorAll('button[type="button"]');
     buttons.forEach(b => {
       b.addEventListener('click', this.toggleSelectorFor.bind(this, b.name));

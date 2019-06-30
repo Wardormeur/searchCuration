@@ -28,12 +28,16 @@ class WebsearchList extends HTMLElement {
       const selected = await this.selector.start();
       el.value = selected.value;
       elPath.value = selected.path;
+      // TODO : try to generalize the path and ensure it ends with a "a" tag
+      // Select all corresponding paths
+      // OR let the user select 2 of them and generalize from tehre
     } catch (e) {
       console.log('rejected', e);
     } finally {
       this.selector.stop();
     }
   }
+
   async save() {
     const inputs = this.shadowRoot.querySelectorAll('input');
     let payload = {};
@@ -43,6 +47,16 @@ class WebsearchList extends HTMLElement {
     payload.addedAt = new Date();
     const currentTab = (await browser.tabs.query({active: true, windowId: browser.windows.WINDOW_ID_CURRENT}))[0];
     await this.addOrReplace(currentTab.url, payload);
+    // Specific to this element
+    const jobsListing = await this.selectJobs(payload.listing_link_selector);
+    await Promise.all(
+      jobsListing.map(j => {
+        // Horrible hack :)))
+        return this.addOrReplace.bind({ storageKey: 'jobs' })(j.url, { title: j.value });
+      }));
+  }
+  async selectJobs(selector) {
+    return this.selector.selectAll(selector);
   }
   async addOrReplace(url, payload) {
     let list = [];

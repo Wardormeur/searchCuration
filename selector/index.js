@@ -5,7 +5,6 @@ class Selector {
     this.tabs = Tabs;
     this.started = false;
     this.currentTabId;
-    console.log('selector init')
     this.tabs.executeScript(this.js);
   }
   start() {
@@ -13,6 +12,14 @@ class Selector {
       action: 'select'
     };
     this.tabs.insertCSS(this.css);
+    this.started = true;
+    return browser.tabs.sendMessage(this.currentTabId, message);
+  }
+  selectAll(target) {
+    const message = {
+      action: 'selectAll',
+      target
+    };
     this.started = true;
     return browser.tabs.sendMessage(this.currentTabId, message);
   }

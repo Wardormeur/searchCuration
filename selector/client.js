@@ -2,13 +2,12 @@
 try {
   new SelectorClient();
 } catch(e) {
-  console.log('err', e)
   class SelectorClient {
     constructor(){
       this.clickListener = function (event) {
         event.preventDefault();
         document.removeEventListener('click', this.escapeListener, { capture: true });
-        this.resolve({ value: event.target.innerText, path: this.getDomPath(event.target).join(' ') });
+        this.resolve(this.DOMElementFormat(event.target));
       };
       this.escapeListener = function (event) {
         event.preventDefault();
@@ -25,6 +24,9 @@ try {
           case 'select':
             return new Promise(this.elementClicked.bind(this));
             break;
+          case 'selectAll':
+            return new Promise(this.selectAll.bind(this, request.target));
+            break;
           case 'stop':
             return this.cleanup();
             break;
@@ -33,11 +35,30 @@ try {
         }
       });
     }
+    DOMElementFormat(DOMElement) {
+      const formatted = { value: DOMElement.innerText, path: this.getDomPath(DOMElement).join(' ') };
+      if (DOMElement.url) formatted.url = DOMElement.url;
+      return formatted;
+    }
     elementClicked(resolve, reject) {
       this.resolve = resolve;
       this.reject = reject;
       document.addEventListener('click', this.clickListener.bind(this), { capture: true, once: true });
       document.addEventListener('keydown', this.escapeListener.bind(this), { capture: true, once: true });
+    }
+    selectAll(target, resolve, reject) {
+      this.resolve = resolve;
+      this.reject = reject;
+      const elems = document.querySelectorAll(target);
+      resolve(Array.from(elems).map((elem) => {
+        const href = this.selectNearest('a', elem);
+        return this.DOMElementFormat.bind(this)({ ...elem, url: href.attributes.href });
+      }));
+    }
+    selectNearest(tag, elem) {
+      const closest = elem.closest(tag);
+      if (closest) return closest;
+      return elem.querySelector('a');
     }
     cleanup() {
       document.removeEventListener('click', this.clickListener, { capture: true });
@@ -45,6 +66,7 @@ try {
       return this.reject();
     }
     // From : https://stackoverflow.com/questions/5728558/get-the-dom-path-of-the-clicked-a
+    // TODO: set a max depth to have a more generic selector ?
     getDomPath(el) {
       if (!el) {
         return;
@@ -69,8 +91,9 @@ try {
           nodeName += "::shadow";
           isShadow = false;
         }
-        if ( sibCount > 1 ) {
-          stack.unshift(nodeName + ':nth-of-type(' + (sibIndex + 1) + ')');
+        if ( sibCount > 1 && el.classList.length > 0 ) {
+          // stack.unshift(nodeName + ':nth-of-type(' + (sibIndex + 1) + ')');
+          stack.unshift(`${nodeName}.${Array.from(el.classList).join('.')}`);
         } else {
           stack.unshift(nodeName);
         }
